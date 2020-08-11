@@ -14,9 +14,9 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  motorControl(1,0,0,1);
+  moveForwards();
   delay(1000);
-  motorControl(0,1,1,0);
+  moveBackwards();
   delay(1000);
 }
 
@@ -25,4 +25,10 @@ void motorControl(int IN1State, int IN2State, int IN3State, int IN4State) {
   digitalWrite(IN2, IN2State);
   digitalWrite(IN3, IN3State);
   digitalWrite(IN4, IN4State);
+}
+void moveForwards() {
+  motorControl(1, 0, 0, 1);
+}
+void moveBackwards() {
+  motorControl(0, 1, 1, 0);
 }
