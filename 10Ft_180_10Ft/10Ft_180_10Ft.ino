@@ -9,36 +9,38 @@ void setup() {
   pinMode(IN2, OUTPUT);
   pinMode(IN3, OUTPUT);
   pinMode(IN4, OUTPUT);
-  moveForwards();
-  delay(2000);
-  stopMoving();
+  digitalWrite(ENA, HIGH);
+  digitalWrite(ENB, HIGH);
+  moveForwards(2000);
   delay(400);
   turn(550, "right");
-  moveForwards();
-  delay(2000);
-  stopMoving();
+  moveForwards(2000);
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
 }
 
-void motorControl(int ENAState, int ENBState, int IN1State, int IN2State, int IN3State, int IN4State) {
-  digitalWrite(ENA, ENAState);
-  digitalWrite(ENB, ENBState);
+void motorControl(int IN1State, int IN2State, int IN3State, int IN4State) {
+  //digitalWrite(ENA, ENAState);
+  //digitalWrite(ENB, ENBState);
   digitalWrite(IN1, IN1State);
   digitalWrite(IN2, IN2State);
   digitalWrite(IN3, IN3State);
   digitalWrite(IN4, IN4State);
 }
-void moveForwards() {
-  motorControl(1, 1, 1, 0, 0, 1);
+void moveForwards(int duration) {
+  motorControl(1, 0, 0, 1);
+  delay(duration);
+  stopMoving();
 }
-void moveBackwards() {
-  motorControl(1, 1, 0, 1, 1, 0);
+void moveBackwards(int duration) {
+  motorControl(0, 1, 1, 0);
+  delay(duration);
+  stopMoving();
 }
 void stopMoving() {
-  motorControl(0, 0, 0, 0, 0, 0);
+  motorControl(0, 0, 0, 0);
 }
 void turn(int duration, String dir) {
   if (dir == "left") {
