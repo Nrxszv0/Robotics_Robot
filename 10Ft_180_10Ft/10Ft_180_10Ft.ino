@@ -11,10 +11,7 @@ void setup() {
   pinMode(IN4, OUTPUT);
   digitalWrite(ENA, HIGH);
   digitalWrite(ENB, HIGH);
-  moveForwards(2000);
-  delay(400);
-  turn(550, "right");
-  moveForwards(2000);
+  calibrateStraight("forwards");
 }
 
 void loop() {
@@ -29,27 +26,49 @@ void motorControl(int IN1State, int IN2State, int IN3State, int IN4State) {
   digitalWrite(IN3, IN3State);
   digitalWrite(IN4, IN4State);
 }
-void moveForwards(int duration) {
+void moveForwards(float distance) {
   motorControl(1, 0, 0, 1);
-  delay(duration);
+  timeDly = distance/ 2.45
+  delay(timeDly);
   stopMoving();
 }
-void moveBackwards(int duration) {
+void moveBackwards(float distance) {
   motorControl(0, 1, 1, 0);
-  delay(duration);
+  timeDly = distance/ 2.45
+  delay(timeDly);
   stopMoving();
 }
 void stopMoving() {
   motorControl(0, 0, 0, 0);
 }
-void turn(int duration, String dir) {
+void turn(float degree, String dir) {
   if (dir == "left") {
-    motorControl(1, 1, 0, 1, 0, 1);
-    delay(duration);
+    motorControl(0, 1, 0, 1);
   }
-  if (dir == "right") {
-    motorControl(1, 1, 1, 0, 1, 0);
-    delay(duration);
+  else if (dir == "right") {
+    motorControl(1, 0, 1, 0);
   }
+  delay(distance);
+  stopMoving();
+}
+void calibrateStraight(String dir) {
+  if (dir == "forwards") {
+    motorControl(1, 0, 0, 1);
+  }
+  else if ( dir == "backwards") {
+    motorControl(0, 1, 1, 0);
+  }
+  delay(5000); // goes 12 feet and 3 inches in 5 seconds 12.25 = rate * time.
+  //r = d/t . r = 12.25/5 = 2.45 feet/second. t = d/r. t = d/ 2.45. t = d/2.45
+  stopMoving();
+}
+void calibrateTurn(String dir) {
+  if (dir == "left") {
+    motorControl(0, 1, 0, 1);
+  }
+  else if (dir == "right") {
+    motorControl(1, 0, 1, 0);
+  }
+  delay(5000);
   stopMoving();
 }
