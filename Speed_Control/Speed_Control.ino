@@ -10,16 +10,10 @@ void setup() {
   pinMode(IN2, OUTPUT);
   pinMode(IN3, OUTPUT);
   pinMode(IN4, OUTPUT);
-  digitalWrite(ENA, HIGH);
-  digitalWrite(ENB, HIGH);
-  moveForwards(4.875);
-  delay(1000);
-  turn(180, "right");
-  delay(500);
-  moveForwards(4.875);
-  delay(1000);
-  turn(180, "left");
-
+  //digitalWrite(ENA, HIGH);
+  //digitalWrite(ENB, HIGH);
+  setSpeed(100,100);
+  moveForwards(100);
 }
 
 void loop() {
@@ -28,11 +22,15 @@ void loop() {
 
 void motorControl(int IN1State, int IN2State, int IN3State, int IN4State) {
   //digitalWrite(ENA, ENAState);
-  //digitalWrite(ENB, ENBState);
+  //digitalWrite(ENB, ENBState); // look up math for map function use map but not function. only math equation.
   digitalWrite(IN1, IN1State);
   digitalWrite(IN2, IN2State);
   digitalWrite(IN3, IN3State);
   digitalWrite(IN4, IN4State);
+}
+void setSpeed(int ENAState, int ENBState) {
+  analogWrite(ENA, ENAState);
+  analogWrite(ENB, ENBState);
 }
 void stopMoving() {
   motorControl(0, 0, 0, 0);
