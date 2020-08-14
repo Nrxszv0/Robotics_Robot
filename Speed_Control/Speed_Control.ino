@@ -1,6 +1,6 @@
 int ENA = 5, ENB = 6;
 int IN1 = 7, IN2 = 8, IN3 = 9, IN4 = 11;
-float leftSpeed, rightSpeed, minSpeed = 100, maxSpeed = 255;
+float leftSpeed, rightSpeed, minSpeed = 100, maxSpeed = 255, straightSpeed;
 float timeDly, baseFeetPerSecond = 2.2, feetPerSecond, baseDegreesPerSecond = 360, degreesPerSecond;
 void setup() {
   // put your setup code here, to run once:
@@ -13,8 +13,9 @@ void setup() {
   pinMode(IN4, OUTPUT);
   //digitalWrite(ENA, HIGH);
   //digitalWrite(ENB, HIGH);
-  setSpeed(200, 200);
-  turn(180,"left");
+  setSpeed(175, 175);
+  moveForwards(1);
+  //turn(180,"left");
 }
 
 void loop() {
@@ -34,17 +35,20 @@ void setSpeed(int ENAVal, int ENBVal) {
   analogWrite(ENB, ENBVal);
   leftSpeed = ENAVal;
   rightSpeed = ENBVal;
+  straightSpeed = ENAVal;
+  
 }
 void stopMoving() {
   motorControl(0, 0, 0, 0);
 }
 void moveForwards(float distance) {
   motorControl(1, 0, 0, 1);
-  feetPerSecond = baseFeetPerSecond * (leftSpeed / maxSpeed);
+  //feetPerSecond = baseFeetPerSecond * (straightSpeed / maxSpeed);
+  feetPerSecond = (.0075*straightSpeed) + .35;
   timeDly = (distance / feetPerSecond) * 1000.0;
   Serial.print(feetPerSecond);
   Serial.print("\t\t\t");
-  Serial.print(leftSpeed);
+  Serial.print(straightSpeed);
   Serial.print("\t\t\t");
   Serial.println(timeDly);
   delay(timeDly);
@@ -52,7 +56,8 @@ void moveForwards(float distance) {
 }
 void moveBackwards(float distance) {
   motorControl(0, 1, 1, 0);
-  feetPerSecond = baseFeetPerSecond * (leftSpeed / maxSpeed);
+  //feetPerSecond = baseFeetPerSecond * (straightSpeed / maxSpeed);
+  feetPerSecond = (.0075*straightSpeed) + .35;
   timeDly = (distance / feetPerSecond) * 1000;
   delay(timeDly);
   stopMoving();
