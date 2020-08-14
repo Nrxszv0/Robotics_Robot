@@ -1,6 +1,6 @@
 int ENA = 5, ENB = 6;
 int IN1 = 7, IN2 = 8, IN3 = 9, IN4 = 11;
-float leftSpeed, rightSpeed, minSpeed = 100, maxSpeed = 255, speedVal;
+float leftSpeed, rightSpeed, minSpeed = 100, maxSpeed = 255, speedVal, straightSpeed;
 float timeDly, baseFeetPerSecond = 2.2, baseDegreesPerSecond = 360, degreesPerSecond;
 void setup() {
   // put your setup code here, to run once:
@@ -13,13 +13,13 @@ void setup() {
   pinMode(IN4, OUTPUT);
   //digitalWrite(ENA, HIGH);
   //digitalWrite(ENB, HIGH);
-  //setSpeed(175, 175);
-  moveForwards(1, 2.25);
-  //turn(180,"left");
+  setSpeed(250, 250);
+  //moveBackwards(1,1.8);
+  turn(180,"left");
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  // put your main code here, to run repeatemotorControl(0, 1, 1, 0);dly:
 }
 
 void motorControl(int IN1State, int IN2State, int IN3State, int IN4State) {
@@ -33,9 +33,9 @@ void motorControl(int IN1State, int IN2State, int IN3State, int IN4State) {
 void setSpeed(int ENAVal, int ENBVal) {
   analogWrite(ENA, ENAVal);
   analogWrite(ENB, ENBVal);
-  //leftSpeed = ENAVal;
-  //rightSpeed = ENBVal;
-  //straightSpeed = ENAVal;
+  leftSpeed = ENAVal;
+  rightSpeed = ENBVal;
+  straightSpeed = ENAVal;
 
 }
 void stopMoving() {
@@ -54,11 +54,12 @@ void moveForwards(float distance, float feetPerSecond) {
   delay(timeDly);
   stopMoving();
 }
-void moveBackwards(float distance, float feetPerSecond) {
-  motorControl(0, 1, 1, 0);
+void moveBackwards(float distance, float feetPerSecond) {  
   //feetPerSecond = baseFeetPerSecond * (straightSpeed / maxSpeed);
   speedVal = (feetPerSecond - 0.35) / 0.0075;
   timeDly = (distance / feetPerSecond) * 1000.0;
+  setSpeed(speedVal, speedVal);
+  motorControl(0, 1, 1, 0);
   delay(timeDly);
   stopMoving();
 }
