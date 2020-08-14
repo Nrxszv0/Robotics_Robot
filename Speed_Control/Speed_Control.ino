@@ -1,6 +1,7 @@
 int ENA = 5, ENB = 6;
 int IN1 = 7, IN2 = 8, IN3 = 9, IN4 = 11;
-float timeDly, feetPerSecond = 2.2, degreesPerSecond = 330;
+float leftSpeed, rightSpeed, minSpeed = 100, maxSpeed = 255;
+float timeDly, baseFeetPerSecond = 2.2, feetPerSecond, baseDegreesPerSecond = 360, degreesPerSecond;
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
@@ -12,8 +13,8 @@ void setup() {
   pinMode(IN4, OUTPUT);
   //digitalWrite(ENA, HIGH);
   //digitalWrite(ENB, HIGH);
-  setSpeed(100,100);
-  moveForwards(100);
+  setSpeed(200, 200);
+  turn(180,"left");
 }
 
 void loop() {
@@ -28,35 +29,48 @@ void motorControl(int IN1State, int IN2State, int IN3State, int IN4State) {
   digitalWrite(IN3, IN3State);
   digitalWrite(IN4, IN4State);
 }
-void setSpeed(int ENAState, int ENBState) {
-  analogWrite(ENA, ENAState);
-  analogWrite(ENB, ENBState);
+void setSpeed(int ENAVal, int ENBVal) {
+  analogWrite(ENA, ENAVal);
+  analogWrite(ENB, ENBVal);
+  leftSpeed = ENAVal;
+  rightSpeed = ENBVal;
 }
 void stopMoving() {
   motorControl(0, 0, 0, 0);
 }
 void moveForwards(float distance) {
   motorControl(1, 0, 0, 1);
-  timeDly = distance / feetPerSecond * 1000;
+  feetPerSecond = baseFeetPerSecond * (leftSpeed / maxSpeed);
+  timeDly = (distance / feetPerSecond) * 1000.0;
+  Serial.print(feetPerSecond);
+  Serial.print("\t\t\t");
+  Serial.print(leftSpeed);
+  Serial.print("\t\t\t");
+  Serial.println(timeDly);
   delay(timeDly);
   stopMoving();
 }
 void moveBackwards(float distance) {
   motorControl(0, 1, 1, 0);
-  timeDly = distance / feetPerSecond * 1000;
+  feetPerSecond = baseFeetPerSecond * (leftSpeed / maxSpeed);
+  timeDly = (distance / feetPerSecond) * 1000;
   delay(timeDly);
   stopMoving();
 }
 void turn(int degree, String dir) {
   if (dir == "left") {
     motorControl(0, 1, 0, 1);
+    //degreesPerSecond = map(leftSpeed, minSpeed, maxSpeed,
+    degreesPerSecond = baseDegreesPerSecond * (leftSpeed / maxSpeed);
   }
   else if (dir == "right") {
     motorControl(1, 0, 1, 0);
+    degreesPerSecond = baseDegreesPerSecond * (rightSpeed / maxSpeed);
   }
   // Omega = 398 degrees per second.
   // Theta = Omega * time
-  timeDly = degree / degreesPerSecond * 1000;
+
+  timeDly = (degree / degreesPerSecond) * 1000;
   delay(timeDly);
   stopMoving();
 }
