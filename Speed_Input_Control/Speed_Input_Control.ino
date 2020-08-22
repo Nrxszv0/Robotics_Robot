@@ -1,5 +1,7 @@
-int ENA = 5, ENB = 6;
-int IN1 = 7, IN2 = 8, IN3 = 9, IN4 = 11;
+//int ENA = 5, ENB = 6;
+//int IN1 = 7, IN2 = 8, IN3 = 9, IN4 = 11;
+int ENA = 2, ENB = 8;
+int IN1 = 3, IN2 = 4, IN3 = 5, IN4 = 6;
 float leftSpeed, rightSpeed, minSpeed = 100, maxSpeed = 255, speedVal, straightSpeed;
 float timeDly, baseFeetPerSecond = 2.2, baseDegreesPerSecond = 360, degreesPerSecond;
 void setup() {
@@ -14,8 +16,8 @@ void setup() {
   //digitalWrite(ENA, HIGH);
   //digitalWrite(ENB, HIGH);
   //setSpeed(250, 250);
-  //moveForwards(4,2);
- // motorControl(1, 0, 0, 1);
+  moveBackwards(2,1.6);
+   //motorControl(1, 0, 1, 0);
   //turn(180,"left");
   
 }
