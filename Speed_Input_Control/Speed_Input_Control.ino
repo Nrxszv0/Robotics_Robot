@@ -13,9 +13,11 @@ void setup() {
   pinMode(IN4, OUTPUT);
   //digitalWrite(ENA, HIGH);
   //digitalWrite(ENB, HIGH);
-  setSpeed(250, 250);
-  //moveBackwards(1,1.8);
-  turn(180,"left");
+  //setSpeed(250, 250);
+  //moveForwards(4,2);
+ // motorControl(1, 0, 0, 1);
+  //turn(180,"left");
+  
 }
 
 void loop() {

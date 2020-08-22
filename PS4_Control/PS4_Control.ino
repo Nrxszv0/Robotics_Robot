@@ -80,21 +80,24 @@ void loop() {
     }
     else {
       if (PS4.getButtonClick(TRIANGLE)) {
-        Serial.print(F("\r\nTriangle\t Running Command"));
-        runCommand();
+        Serial.print(F("\r\nTriangle\tMoving Forwards"));
+        moveForwards(4, 2);
         //PS4.setRumbleOn(RumbleLow);
       }
       if (PS4.getButtonClick(CIRCLE)) {
-        Serial.print(F("\r\nCircle"));
-        PS4.setRumbleOn(RumbleHigh);
+        Serial.print(F("\r\nCircle\tTurning Left"));
+        turn(360,"left");
+        //PS4.setRumbleOn(RumbleHigh);
       }
       if (PS4.getButtonClick(CROSS)) {
-        Serial.print(F("\r\nCross"));
-        PS4.setLedFlash(10, 10); // Set it to blink rapidly
+        Serial.print(F("\r\nCross\tMoving Backwards"));
+        moveBackwards(4, 2);
+        //PS4.setLedFlash(10, 10); // Set it to blink rapidly
       }
       if (PS4.getButtonClick(SQUARE)) {
-        Serial.print(F("\r\nSquare"));
-        PS4.setLedFlash(0, 0); // Turn off blinking
+        Serial.print(F("\r\nSquare\tTurning Right"));
+        turn(360,"right");
+        //PS4.setLedFlash(0, 0); // Turn off blinking
       }
 
       if (PS4.getButtonClick(UP)) {
