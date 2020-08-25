@@ -12,7 +12,7 @@ void setup() {
   pinMode(IN3, OUTPUT);
   pinMode(IN4, OUTPUT);
   pinMode(RedLEDsPin, OUTPUT);
-   pinMode(BlueLEDsPin, OUTPUT);
+  pinMode(BlueLEDsPin, OUTPUT);
   ledAction("Red", 0);
   ledAction("Blue", 0);
   //digitalWrite(ENA, HIGH);
