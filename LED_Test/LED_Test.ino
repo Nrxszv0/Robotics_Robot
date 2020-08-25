@@ -24,8 +24,12 @@ void loop() {
 
   Serial.print(F("\r\nR3\tRed Team"));
   //PS4.setLed(Red);
-  //ledAction("Red", 1);
+  ledAction("Red", 0);
   ledAction("Blue", 1);
+  delay(150);
+  ledAction("Red", 1);
+  ledAction("Blue", 0);
+  delay(150);
 }
 void ledAction(String color, int ledState) {
   if (color == "Red") {
