@@ -52,6 +52,13 @@ void loop() {
   Usb.Task();
 
   if (PS4.connected()) {
+    if(PS4.getButtonClick(L3)) {
+      Serial.print(F("\r\nR3\tRed Team"));
+      PS4.setLed(Red);
+      ledAction("Red", 1);
+    }
+  }
+  /*if (PS4.connected()) {
     if (PS4.getAnalogHat(LeftHatX) > 137 || PS4.getAnalogHat(LeftHatX) < 117 || PS4.getAnalogHat(LeftHatY) > 137 || PS4.getAnalogHat(LeftHatY) < 117 || PS4.getAnalogHat(RightHatX) > 137 || PS4.getAnalogHat(RightHatX) < 117 || PS4.getAnalogHat(RightHatY) > 137 || PS4.getAnalogHat(RightHatY) < 117) {
       Serial.print(F("\r\nLeftHatX: "));
       Serial.print(PS4.getAnalogHat(LeftHatX));
@@ -155,6 +162,12 @@ void loop() {
         }
       }
     }
+  }*/
+}
+void ledAction(String color, int ledState) {
+  if(color == "Red") {
+    int LEDPin = 2;
+    digitalWrite(LEDPin, ledState);
   }
 }
 void motorControl(int IN1State, int IN2State, int IN3State, int IN4State) {
