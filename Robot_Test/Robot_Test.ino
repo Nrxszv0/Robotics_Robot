@@ -99,6 +99,27 @@ void setSpeed(int ENAVal, int ENBVal) {
 void stopMoving() {
   motorControl(0, 0, 0, 0);
 }
+void stayStopped() {
+  setSpeed(0, 0);
+  stopMoving();
+}
+void continueForwards(int motorSpeed) {
+  setSpeed(motorSpeed, motorSpeed);
+  motorControl(1, 0, 0, 1);
+}
+void continueBackwards(int motorSpeed) {
+  setSpeed(motorSpeed, motorSpeed);
+  motorControl(0, 1, 1, 0);
+}
+void continueTurning(String dir) {
+  setSpeed(125, 125);
+  if(dir =="left") {
+    motorControl(0,1,0,1);  
+  }
+  else if(dir =="right") {
+    motorControl(1,0,1,0);
+  }
+}
 void moveForwards(float distance, float feetPerSecond) {
   //feetPerSecond = baseFeetPerSecond * (straightSpeed / maxSpeed);
   //feetPerSecond = (.0075 * straightSpeed) + .35;
