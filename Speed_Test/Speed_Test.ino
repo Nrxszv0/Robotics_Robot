@@ -79,7 +79,8 @@ void loop() {
       if (L2ButtonVal != oldL2Value && L2ButtonVal >= 100) {
         Serial.print(F("\r\nL2: "));
         Serial.print(PS4.getAnalogButton(L2));
-        Serial.print(F("\r\tStraightVelocity: "));
+        //Serial.print(F("\r\tStraightVelocity: "));
+        Serial.print(F("\r\tReversing"));
         //straightVelocity = map(L2ButtonVal, 0 , 255, minSpeed, maxSpeed);
         //Serial.print(straightVelocity);
         continueBackwards(L2ButtonVal);
