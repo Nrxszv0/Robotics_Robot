@@ -73,12 +73,12 @@ void loop() {
     if (PS4.getAnalogButton(L2)) {
       L2ButtonVal = PS4.getAnalogButton(L2);
       if (L2ButtonVal <= 100) {
-        Serial.print(F("\r\nL1\tStopping"));
+        Serial.print(F("\r\nStopping"));
         stayStopped();
       }
       if (L2ButtonVal != oldL2Value && L2ButtonVal >= 100) {
         Serial.print(F("\r\nL2: "));
-        Serial.print(PS4.getAnalogButton(L2));
+        Serial.print(L2ButtonVal);
         //Serial.print(F("\r\tStraightVelocity: "));
         Serial.print(F("\r\tReversing"));
         //straightVelocity = map(L2ButtonVal, 0 , 255, minSpeed, maxSpeed);
@@ -86,11 +86,31 @@ void loop() {
         continueBackwards(L2ButtonVal);
       }
     }
+    if (PS4.getAnalogButton(R2)) {
+      R2ButtonVal = PS4.getAnalogButton(R2);
+      if (R2ButtonVal <= 100) {
+        Serial.print(F("\r\nStopping"));
+        stayStopped();
+      }
+      if (R2ButtonVal != oldR2Value && R2ButtonVal >= 100) {
+        Serial.print(F("\r\nR2: "));
+        Serial.print(R2ButtonVal);
+        //Serial.print(F("\r\tStraightVelocity: "));
+        Serial.print(F("\r\tGoing Forwards"));
+        //straightVelocity = map(L2ButtonVal, 0 , 255, minSpeed, maxSpeed);
+        //Serial.print(straightVelocity);
+        continueForwards(R2ButtonVal);
+      }
+    }
     oldL2Value = PS4.getAnalogButton(L2);
+    oldR2Value = PS4.getAnalogButton(R2);
+
+    
     if (PS4.getButtonClick(L1)) {
       Serial.print(F("\r\nL1\tStopping"));
       stayStopped();
     }
+    
   }
 
 }
