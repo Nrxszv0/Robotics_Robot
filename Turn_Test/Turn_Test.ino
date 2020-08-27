@@ -114,7 +114,15 @@ void loop() {
       L3StickXVal = PS4.getAnalogHat(LeftHatX);
       Serial.print(F("\r\nLeftHatX: "));
       Serial.print(L3StickXVal);
+      Serial.print(F("\r\tTurning Left "));
       continueTurning("left");
+    }
+    else if (PS4.getAnalogHat(LeftHatX) > 137) {
+      L3StickXVal = PS4.getAnalogHat(LeftHatX);
+      Serial.print(F("\r\nLeftHatX: "));
+      Serial.print(L3StickXVal);
+      Serial.print(F("\r\tTurning Right "));
+      continueTurning("right");
     }
 
 
