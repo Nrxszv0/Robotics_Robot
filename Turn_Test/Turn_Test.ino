@@ -28,7 +28,7 @@ float leftSpeed, rightSpeed, minSpeed = 100, maxSpeed = 255, speedVal, straightS
 float timeDly, baseFeetPerSecond = 2.2, baseDegreesPerSecond = 360, degreesPerSecond;
 int RedLEDsPin = 48, BlueLEDsPin = 53;
 int L2ButtonVal, R2ButtonVal, L3StickXVal;
-int straightVelocity;
+int straightVelocity, turnSpeed;
 void setup() {
   Serial.begin(115200);
 #if !defined(__MIPSEL__)
@@ -106,23 +106,31 @@ void loop() {
     oldL2Value = PS4.getAnalogButton(L2);
     oldR2Value = PS4.getAnalogButton(R2);
 
-    if (PS4.getAnalogHat(LeftHatX) < 137 && PS4.getAnalogHat(LeftHatX) > 117) {
+    /*if (PS4.getAnalogHat(LeftHatX) < 137 && PS4.getAnalogHat(LeftHatX) > 117) {
       //Serial.print(F("\r\nStopping"));
       //stayStopped();
-    }
-    else if (PS4.getAnalogHat(LeftHatX) < 117) {
+    }*/
+    if (PS4.getAnalogHat(LeftHatX) < 117) {
       L3StickXVal = PS4.getAnalogHat(LeftHatX);
+      turnSpeed = map(L3StickXVal, 117, 0, minSpeed, maxSpeed);
       Serial.print(F("\r\nLeftHatX: "));
       Serial.print(L3StickXVal);
       Serial.print(F("\r\tTurning Left "));
-      continueTurning("left");
+      //continueTurning("left");
+      continueTurningWithSpeed("left", turnSpeed);
     }
     else if (PS4.getAnalogHat(LeftHatX) > 137) {
       L3StickXVal = PS4.getAnalogHat(LeftHatX);
+      turnSpeed = map(L3StickXVal, 137, 255, minSpeed, maxSpeed);
       Serial.print(F("\r\nLeftHatX: "));
       Serial.print(L3StickXVal);
       Serial.print(F("\r\tTurning Right "));
-      continueTurning("right");
+      continueTurningWithSpeed("right", turnSpeed);
+      //continueTurning("right");
+    }
+    else {
+      //Serial.print(F("\r\nStopping"));
+      //stayStopped();
     }
 
 
@@ -177,6 +185,15 @@ void continueBackwards(int motorSpeed) {
 }
 void continueTurning(String dir) {
   setSpeed(125, 125);
+  if (dir == "left") {
+    motorControl(0, 1, 0, 1);
+  }
+  else if (dir == "right") {
+    motorControl(1, 0, 1, 0);
+  }
+}
+void continueTurningWithSpeed(String dir, int turnVal) {
+  setSpeed(turnVal, turnVal);
   if (dir == "left") {
     motorControl(0, 1, 0, 1);
   }
