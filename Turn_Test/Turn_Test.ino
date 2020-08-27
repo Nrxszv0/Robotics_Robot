@@ -27,7 +27,8 @@ int IN1 = 3, IN2 = 4, IN3 = 5, IN4 = 6;
 float leftSpeed, rightSpeed, minSpeed = 100, maxSpeed = 255, speedVal, straightSpeed;
 float timeDly, baseFeetPerSecond = 2.2, baseDegreesPerSecond = 360, degreesPerSecond;
 int RedLEDsPin = 48, BlueLEDsPin = 53;
-int L2ButtonVal, R2ButtonVal, straightVelocity;
+int L2ButtonVal, R2ButtonVal, L3StickXVal;
+int straightVelocity;
 void setup() {
   Serial.begin(115200);
 #if !defined(__MIPSEL__)
@@ -58,7 +59,7 @@ void loop() {
   Usb.Task();
 
   if (PS4.connected()) {
-    if (PS4.getButtonClick(L3)) {
+    if (PS4.getButtonClick(L3)) { // checkRedTeam(); add functions for if statements.
       Serial.print(F("\r\nL3\tRed Team"));
       PS4.setLed(Red);
       ledAction("Red", 1);
@@ -104,13 +105,24 @@ void loop() {
     }
     oldL2Value = PS4.getAnalogButton(L2);
     oldR2Value = PS4.getAnalogButton(R2);
-    
-    
+
+    if (PS4.getAnalogHat(LeftHatX) < 137 && PS4.getAnalogHat(LeftHatX) > 117) {
+      //Serial.print(F("\r\nStopping"));
+      stayStopped();
+    }
+    else if (PS4.getAnalogHat(LeftHatX) < 117) {
+      L3StickXVal = PS4.getAnalogHat(LeftHatX);
+      Serial.print(F("\r\nLeftHatX: "));
+      Serial.print(L3StickXVal);
+      continueTurning("left");
+    }
+
+
     if (PS4.getButtonClick(L1)) {
       Serial.print(F("\r\nL1\tStopping"));
       stayStopped();
     }
-    
+
   }
 
 }
@@ -157,11 +169,11 @@ void continueBackwards(int motorSpeed) {
 }
 void continueTurning(String dir) {
   setSpeed(125, 125);
-  if(dir =="left") {
-    motorControl(0,1,0,1);  
+  if (dir == "left") {
+    motorControl(0, 1, 0, 1);
   }
-  else if(dir =="right") {
-    motorControl(1,0,1,0);
+  else if (dir == "right") {
+    motorControl(1, 0, 1, 0);
   }
 }
 void moveForwards(float distance, float feetPerSecond) {
