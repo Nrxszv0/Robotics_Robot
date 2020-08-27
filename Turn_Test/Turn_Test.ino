@@ -28,6 +28,7 @@ float leftSpeed, rightSpeed, minSpeed = 100, maxSpeed = 255, speedVal, straightS
 float timeDly, baseFeetPerSecond = 2.2, baseDegreesPerSecond = 360, degreesPerSecond;
 int RedLEDsPin = 48, BlueLEDsPin = 53;
 int L2ButtonVal, R2ButtonVal, L3StickXVal;
+int oldL3XValue;
 int straightVelocity, turnSpeed;
 void setup() {
   Serial.begin(115200);
@@ -109,29 +110,28 @@ void loop() {
     /*if (PS4.getAnalogHat(LeftHatX) < 137 && PS4.getAnalogHat(LeftHatX) > 117) {
       //Serial.print(F("\r\nStopping"));
       //stayStopped();
-    }*/
-    if (PS4.getAnalogHat(LeftHatX) < 117) {
-      L3StickXVal = PS4.getAnalogHat(LeftHatX);
-      turnSpeed = map(L3StickXVal, 117, 0, minSpeed, maxSpeed);
-      Serial.print(F("\r\nLeftHatX: "));
-      Serial.print(L3StickXVal);
-      Serial.print(F("\r\tTurning Left "));
-      //continueTurning("left");
-      continueTurningWithSpeed("left", turnSpeed);
+      }*/
+    if (PS4.getAnalogHat(LeftHatX) != oldL3XValue) {
+      if (PS4.getAnalogHat(LeftHatX) < 117) {
+        L3StickXVal = PS4.getAnalogHat(LeftHatX);
+        turnSpeed = map(L3StickXVal, 117, 0, minSpeed, maxSpeed);
+        Serial.print(F("\r\nLeftHatX: "));
+        Serial.print(L3StickXVal);
+        Serial.print(F("\r\tTurning Left "));
+        //continueTurning("left");
+        continueTurningWithSpeed("left", turnSpeed);
+      }
+      else if (PS4.getAnalogHat(LeftHatX) > 137) {
+        L3StickXVal = PS4.getAnalogHat(LeftHatX);
+        turnSpeed = map(L3StickXVal, 137, 255, minSpeed, maxSpeed);
+        Serial.print(F("\r\nLeftHatX: "));
+        Serial.print(L3StickXVal);
+        Serial.print(F("\r\tTurning Right "));
+        continueTurningWithSpeed("right", turnSpeed);
+        //continueTurning("right");
+      }
     }
-    else if (PS4.getAnalogHat(LeftHatX) > 137) {
-      L3StickXVal = PS4.getAnalogHat(LeftHatX);
-      turnSpeed = map(L3StickXVal, 137, 255, minSpeed, maxSpeed);
-      Serial.print(F("\r\nLeftHatX: "));
-      Serial.print(L3StickXVal);
-      Serial.print(F("\r\tTurning Right "));
-      continueTurningWithSpeed("right", turnSpeed);
-      //continueTurning("right");
-    }
-    else {
-      //Serial.print(F("\r\nStopping"));
-      //stayStopped();
-    }
+    oldL3XValue = PS4.getAnalogHat(LeftHatX);
 
 
     if (PS4.getButtonClick(L1)) {
