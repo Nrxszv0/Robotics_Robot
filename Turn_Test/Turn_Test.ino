@@ -108,7 +108,7 @@ void loop() {
 
     if (PS4.getAnalogHat(LeftHatX) < 137 && PS4.getAnalogHat(LeftHatX) > 117) {
       //Serial.print(F("\r\nStopping"));
-      stayStopped();
+      //stayStopped();
     }
     else if (PS4.getAnalogHat(LeftHatX) < 117) {
       L3StickXVal = PS4.getAnalogHat(LeftHatX);
