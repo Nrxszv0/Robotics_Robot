@@ -28,8 +28,8 @@ int IN1 = 3, IN2 = 4, IN3 = 5, IN4 = 6;
 float leftSpeed, rightSpeed, minSpeed = 100, maxSpeed = 255, speedVal, straightSpeed;
 float timeDly, baseFeetPerSecond = 2.2, baseDegreesPerSecond = 360, degreesPerSecond;
 int RedLEDsPin = 48, BlueLEDsPin = 53;
-int L2ButtonVal, R2ButtonVal, L3StickXVal, R3StickXVal, R3StickYVal;
-int oldL3XValue, oldR3XValue;
+int L2ButtonVal, R2ButtonVal, L3StickXVal,L3StickYVal, R3StickXVal, R3StickYVal;
+int oldL3XValue, oldL3YValue, oldR3XValue, oldR3YValue;
 int straightVelocity, turnSpeed;
 
 int foundationGrabberPinL = A0, foundationGrabberPinR = A1;
@@ -38,10 +38,14 @@ Servo foundationGrabberSerL;
 Servo foundationGrabberSerR;
 bool grabbersDown = false, grabberButtonState = false, prevGrabberButtonState = false;
 
-int servoBasePin = A2;
-int servoBaseVal = 90;
-int servoIncrement = 1;
+int servoBasePin = A2, servoPitchPin1 = A3, servoPitchPin2 = A4, servoPitchPin3 = A5, servoGrabberPin = 13;
+int servoBaseVal = 90 ,servoPitch1Val = 30, servoPitch2Val = 90, servoPitch3Val = 90, servoGrabberVal = 50;
+int servoIncrement = 1, servoIncrementBig = 5;
 Servo servoBase;
+Servo servoPitch1;
+Servo servoPitch2;
+Servo servoPitch3;
+Servo servoGrabber;
 void setup() {
   Serial.begin(115200);
 #if !defined(__MIPSEL__)
@@ -63,17 +67,24 @@ void setup() {
   pinMode(BlueLEDsPin, OUTPUT);
   ledAction("Red", 0);
   ledAction("Blue", 0);
-  //digitalWrite(ENA, HIGH);
-  //digitalWrite(ENB, HIGH);
-  //runCommand();
 
   foundationGrabberSerL.attach(foundationGrabberPinL);
   foundationGrabberSerR.attach(foundationGrabberPinR);
+
   servoBase.attach(servoBasePin);
+  servoPitch1.attach(servoPitchPin1);
+  servoPitch2.attach(servoPitchPin2);
+  servoPitch3.attach(servoPitchPin3);
+  servoGrabber.attach(servoGrabberPin);
 
   foundationGrabberSerL.write(upGrabValL);
   foundationGrabberSerR.write(upGrabValR);
+
   servoBase.write(servoBaseVal);
+  servoPitch1.write(servoPitch1Val);
+  servoPitch2.write(servoPitch2Val);
+  servoPitch3.write(servoPitch3Val);
+  servoGrabber.write(servoGrabberVal);
 
 }
 
@@ -152,6 +163,25 @@ void loop() {
         //continueTurning("right");
       }
     }
+    if (PS4.getAnalogHat(LeftHatY) != oldL3YValue) {
+      if (PS4.getAnalogHat(LeftHatY) < 117) {
+        L3StickYVal = PS4.getAnalogHat(LeftHatY);
+        servoPitch2Val -= servoIncrement;
+        Serial.print(F("\r\nLeftHatY: "));
+        Serial.print(L3StickYVal);
+        Serial.print(F("\r\tMovingPitch2DDown\tservoPitch2Val: "));
+        Serial.print(servoPitch2Val);
+      }
+      else if (PS4.getAnalogHat(LeftHatY) > 137) {
+        L3StickYVal = PS4.getAnalogHat(LeftHatY);
+        servoPitch2Val += servoIncrement;
+        Serial.print(F("\r\nLeftHatY: "));
+        Serial.print(L3StickYVal);
+        Serial.print(F("\r\tMovingPitch2Up\tservoPitch2Val: "));
+        Serial.print(servoPitch2Val);
+      }
+      servoPitch2.write(servoPitch2Val);
+    }
     if (PS4.getAnalogHat(RightHatX) != oldR3XValue) {
       if (PS4.getAnalogHat(RightHatX) < 117) {
         R3StickXVal = PS4.getAnalogHat(RightHatX);
@@ -160,8 +190,6 @@ void loop() {
         Serial.print(R3StickXVal);
         Serial.print(F("\r\tMovingBaseLeft\tservoBaseVal: "));
         Serial.print(servoBaseVal);
-
-
       }
       else if (PS4.getAnalogHat(RightHatX) > 137) {
         R3StickXVal = PS4.getAnalogHat(RightHatX);
@@ -170,15 +198,74 @@ void loop() {
         Serial.print(R3StickXVal);
         Serial.print(F("\r\tMovingBaseRight\tservoBaseVal: "));
         Serial.print(servoBaseVal);
-        
       }
-      
-      //delay(50);
       servoBase.write(servoBaseVal);
     }
-    constrain(servoBaseVal, 0, 180);    
+    if (PS4.getAnalogHat(RightHatY) != oldR3YValue) {
+      if (PS4.getAnalogHat(RightHatY) < 117) {
+        R3StickYVal = PS4.getAnalogHat(RightHatY);
+        servoPitch1Val += servoIncrement;
+        Serial.print(F("\r\nRightHatY: "));
+        Serial.print(R3StickYVal);
+        Serial.print(F("\r\tMovingPitch1DDown\tservoPitch1Val: "));
+        Serial.print(servoPitch1Val);
+      }
+      else if (PS4.getAnalogHat(RightHatY) > 137) {
+        R3StickYVal = PS4.getAnalogHat(RightHatY);
+        servoPitch1Val -= servoIncrement;
+        Serial.print(F("\r\nRightHatY: "));
+        Serial.print(R3StickYVal);
+        Serial.print(F("\r\tMovingPitch1Up\tservoPitch1Val: "));
+        Serial.print(servoPitch1Val);
+
+      }
+      servoPitch1.write(servoPitch1Val);
+    }
+    /*if(PS4.getButtonClick((UP))) {
+      servoPitch2Val -= servoIncrementBig;
+      Serial.print(F("\r\nUp\tMovingPitch2Up"));  
+      Serial.print(servoPitch2Val);
+      
+          
+    }
+    if(PS4.getButtonClick((DOWN))) {
+      servoPitch2Val += servoIncrementBig;
+      Serial.print(F("\r\nDown\tMovingPitch2Down"));      
+      Serial.print(servoPitch2Val);
+    } */   
+    if(PS4.getButtonClick((TRIANGLE))) {
+      servoPitch3Val+= servoIncrementBig;      
+      Serial.print(F("\r\nTriangle\tMovingPitch3Up")); 
+      Serial.print(servoPitch3Val);
+    }
+    if(PS4.getButtonClick((CROSS))) {
+      servoPitch3Val-= servoIncrementBig;      
+      Serial.print(F("\r\nTriangle\tMovingPitch3Down")); 
+      Serial.print(servoPitch3Val);
+    }
+    if(PS4.getButtonClick((CIRCLE))) {
+      servoGrabberVal-= servoIncrementBig; 
+      Serial.print(F("\r\nCircle\tGrabberOpening"));      
+      Serial.print(servoGrabberVal);
+      servoGrabber.write(servoGrabberVal);
+    }
+    if(PS4.getButtonClick((SQUARE))) {
+      servoGrabberVal+= servoIncrementBig;    
+      Serial.print(F("\r\nSquare\tGrabberClosing"));   
+      Serial.print(servoGrabberVal);
+      servoGrabber.write(servoGrabberVal);
+    }
+    constrain(servoBaseVal, 0, 180);
+    constrain(servoPitch1Val, 0, 180);
+    constrain(servoPitch2Val, 0, 180);
+    constrain(servoPitch3Val, 0, 180);
+    //constrain(servoGrabberVal, 0, 180);    
+    servoPitch3.write(servoPitch3Val);
+    //servoGrabber.write(servoGrabberVal);
     oldL3XValue = PS4.getAnalogHat(LeftHatX);
+    oldL3YValue = PS4.getAnalogHat(LeftHatY);
     oldR3XValue = PS4.getAnalogHat(RightHatX);
+    oldR3YValue = PS4.getAnalogHat(RightHatY);
 
     if (PS4.getButtonClick(R1)) {
 
